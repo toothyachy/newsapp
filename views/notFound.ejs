@@ -1,0 +1,13 @@
+<% layout('layout/boilerplate') -%>
+
+    <div class="container row">
+        <div class="col-lg-4 text-center">
+            <h1 class="jumbo"><%=err.status%></h1>
+            <h1><%=err.message%></h1>
+            <img src="/images/polar-bear-white-bear.gif" alt="error-bear">
+        </div>
+        <div class="col-lg-8">
+            <p><%=err.stack%></p>    
+            <h1 class="jumbo">Calm down Keep going</h1>    
+        </div>
+    </div>

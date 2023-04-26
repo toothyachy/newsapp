@@ -1,0 +1,154 @@
+<% layout("layout/boilerplate") -%>
+
+    <div class="container">
+        <div class="sidebarcontainer">
+
+            <form action="/news" method="POST">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="technology" id="checkbox1" name="newsQuery">
+                    <label class="form-check-label" for="checkbox1">
+                        Technology
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="business" id="checkbox2" name="newsQuery">
+                    <label class="form-check-label" for="checkbox2">
+                        Business
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="entertainment" id="checkbox3" name="newsQuery">
+                    <label class="form-check-label" for="checkbox3">
+                        Entertainment
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="health" id="checkbox4" name="newsQuery">
+                    <label class="form-check-label" for="checkbox4">
+                        Health
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="science" id="checkbox5" name="newsQuery">
+                    <label class="form-check-label" for="checkbox5">
+                        Science
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="sports" id="checkbox6" name="newsQuery">
+                    <label class="form-check-label" for="checkbox6">
+                        Sports
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-dark">Filter</button>
+            </form>
+
+            <div class="container mt-5">
+                <h4>Statistics</h4>
+            </div>
+
+        </div>
+
+        <div class="carouselcontainer">
+            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
+                <div class="carousel-indicators">
+                  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <a href=<%=carouselArticles[0].url%>><img src=<%=carouselArticles[0].urlToImage%> class="d-block w-100" alt="article-image"></a>
+                    <div class="carousel-caption d-none d-md-block">
+                    <a href=<%=carouselArticles[0].url%>>  
+                      <h5><%=carouselArticles[0].title%></h5>
+                      <p><%=carouselArticles[0].description%></p>
+                    </a>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <a href=<%=carouselArticles[1].url%>><img src=<%=carouselArticles[1].urlToImage%> class="d-block w-100" alt="article-image"></a>
+                    <div class="carousel-caption d-none d-md-block">
+                    <a href=<%=carouselArticles[1].url%>>  
+                      <h5><%=carouselArticles[1].title%></h5>
+                      <p><%=carouselArticles[1].description%></p>
+                    </a>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <a href=<%=carouselArticles[2].url%>><img src=<%=carouselArticles[2].urlToImage%> class="d-block w-100" alt="article-image"></a>
+                    <div class="carousel-caption d-none d-md-block">
+                    <a href=<%=carouselArticles[2].url%>>  
+                      <h5><%=carouselArticles[2].title%></h5>
+                      <p><%=carouselArticles[2].description%></p>
+                    </a>
+                    </div>
+                  </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+        </div>
+
+        <div class="contentcontainer topArticle mt-5 mb-5">
+            <div class="row g-3 align-items-center">
+                <div class="col-lg-5">
+
+                    <p class="sourceHeader">
+                        <%=topArticle.source%><span class="timestamp">
+                                <%=topArticle.publishedAt%>
+                            </span>
+                    </p>
+
+                    <h5><a href=<%=topArticle.url%>><%=topArticle.title%></a></h5>
+
+                    <p>
+                        <%=topArticle.description%>
+                    </p>
+
+                </div>
+
+                <div class="col-lg-7">
+
+                    <a href=<%=topArticle.url%>><img src=<%=topArticle.urlToImage%>
+                        alt="article-image"></a>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="contentcontainer">
+            <div class="row g-5 align-items-bottom">
+                <% for (let a of articles) { %>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+
+                        <p class="sourceHeader">
+                            <%=a.source%><span class="timestamp">
+                                    <%=a.publishedAt%>
+                                </span>
+                        </p>
+
+                        <a href=<%=a.url%>><img src=<%=a.urlToImage%> alt="article-image"></a>
+
+                        <h5><a href=<%=a.url%>><%=a.title%></a></h5>
+
+
+                        <p>
+                            <%=a.description%>
+                        </p>
+
+                    </div>
+                    <% } %>
+
+            </div>
+        </div>
+
+    </div>

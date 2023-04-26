@@ -1,0 +1,51 @@
+<% layout ("layout/boilerplate") -%>
+
+    <div class="container row">
+        <div class="showcard border-bottom col-lg-8">
+            <div class="card-img">
+                <a href="/likelist/<%=showLike.id%>"><img src="<%=showLike.urlToImage%>" class="card-img-top" alt="like-image"></a>
+            </div>
+
+            <div class="row card-box pt-3">
+                <div class="col-8">
+                    <button type="button" class="btn btn-secondary">
+                        <%=showLike.category%>
+                    </button>
+                </div>
+                <div class="col-4">
+                    <p class="text-right">
+                        <%=showLike.rating%>/5
+                    </p>
+                </div>
+            </div>
+
+            <div class="card-body pt-3">
+                <h3 class="card-title">
+                    <%=showLike.like%>
+                </h3>
+                <p class="card-text">
+                    <%=showLike.description%>
+                </p>
+            </div>
+
+            <div class="row card-box pt-3">
+                <div class="col-4">
+                    <p class="text-muted text-truncate"><em><%=showLike.date%></em></p>
+                </div>
+                <div class="col-4 text-right">
+                    <a href="<%=showLike.url%>">Read More</a>
+                </div>
+                <div class="col-4 text-right">
+                    <a href="/likelist/edit/<%=showLike.id%>">Edit Entry</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="showcard border-bottom col-lg-4">
+            <div class="card-body">
+                <h4 class="card-title">Comments</h4>
+                <!-- implement post comment form
+                show comments -->
+            </div>
+        </div>
+    </div>
