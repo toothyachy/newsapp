@@ -1,4 +1,7 @@
-// testing push + another comment
+if (process.env.NODE_ENV !== "production") {
+  require('dotenv').config();
+}
+
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
@@ -39,9 +42,41 @@ app.use("/covid-watch", covidWatchRoutes);
 app.use("/likelist", likeListRoutes);
 
 
-// ----------- MONGOOSE CONNECTION -------------
+// ----------- SESSION MANAGEMENT -------------
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/newsApp'
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!'
 
-mongoose.connect('mongodb://localhost:27017/newsApp', { useNewUrlParser: true, useUnifiedTopology: true })
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+      secret
+  }
+});
+
+store.on("error", function(e) {
+  console.log("SESSION STORE ERROR", error);
+})
+
+const sessionConfig = {
+  store,
+  secret,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + (1000 * 60 * 60 * 24 * 7), // expires in 1 week
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
+}
+
+app.use(session(sessionConfig))
+
+// ----------- MONGOOSE CONNECTION -------------
+ 
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("CONNECTION OPEN, MY LORD");
   })

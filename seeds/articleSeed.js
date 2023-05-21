@@ -6,7 +6,7 @@
 // Alternatively you can use the AND / OR / NOT keywords, and optionally group these with parenthesis. Eg: crypto AND (ethereum OR litecoin) NOT bitcoin.
 
 
-const apiKey = "87bb8ea427d54d7b9dd7cc16af01fa62";
+const apiKey = process.env.apiKey; 
 // const query = "China%26AND%26covid"
 const query = "covid";
 const axios = require ("axios");
