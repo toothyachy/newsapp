@@ -123,8 +123,8 @@ app.use((err, req, res, next) => {
   res.render('notFound.ejs', { err, date })
 })
 
-
-app.listen(2000, () => console.log("YESH I'M LISTENING"));
+const port = process.env.PORT || 2000
+app.listen(port, () => console.log(`YESH I'M LISTENING ON ${port}`));
 
 
 
