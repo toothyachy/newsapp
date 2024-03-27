@@ -1,12 +1,33 @@
 const express = require("express");
+const app = express();
+
 const uuid = require("uuid");
 const LikeList = require("../models/likeListSchema");
 const {likeListSchema} = require("../schemas.js");
 const AppError = require("../utils/AppError");
 const wrapAsync = require("../utils/wrapAsync");
-const mongoose = require("mongoose");
-
 const router = express.Router();
+
+// ----------- SESSION MANAGEMENT -------------
+
+const session = require('express-session');
+const { sessionConfig, dbUrl } = require('../utils/sessionUtils');
+
+// Use session middleware
+app.use(session(sessionConfig));
+
+// ----------- MONGOOSE CONNECTION -------------
+const mongoose = require('mongoose')
+
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("CONNECTION OPEN, MY LORD");
+  })
+  .catch(err => {
+    console.log(`THERE HAS BEEN AN ERROR. PLS SEE ${err}`);
+  });
+
+// ----------- HELPERS -------------
 
 const d = new Date();
 const date = d.toDateString();
@@ -33,7 +54,6 @@ router.get("/", wrapAsync(async (req, res, next) => {
   const likeList = await LikeList.find();
   res.render("likelist.ejs", { likeList, date });
 }, 404, "Page Not Found"));
-
 
 // ADD NEW LIKE
 router.get("/new", (req, res, next) => {

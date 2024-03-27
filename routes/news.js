@@ -3,6 +3,8 @@ const uuid = require("uuid")
 const Article = require("../models/articleSchema");
 const AppError = require("../utils/AppError");
 const wrapAsync = require("../utils/wrapAsync");
+const cleanUpArticles = require("../utils/cleanUpArticles")
+const { url } = require("inspector");
 
 const router = express.Router();
 
@@ -18,25 +20,22 @@ const date = d.toDateString();
 // Alternatively you can use the AND / OR / NOT keywords, and optionally group these with parenthesis. Eg: crypto AND (ethereum OR litecoin) NOT bitcoin.
 
 
-const apiKey = process.env.apiKey; 
-const headlinesUrl = "https://newsapi.org/v2/top-headlines?pageSize=31&sources="
-const covidUrl = "https://newsapi.org/v2/everything?searchIn=title&sortBy=relevancy&q=covid%26AND%26";
-//searchIn=title or content or description?
+const apiKey = process.env.apiKey;
+const headlinesUrl = "https://newsapi.org/v2/top-headlines?pageSize=50&sources="
 const general = "abc-news,al-jazeera-english,associated-press,axios,bbc-news,cnn,google-news,independent,msnbc,newsweek,new-york-magazine,reddit-r-all,reuters,time,vice-news";
-
-// let defaultImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Al_Jazeera_English_Newsdesk.jpg/1280px-Al_Jazeera_English_Newsdesk.jpg";
 
 
 // -------------------- METHODS ---------------------------
+
 const loadNews = async (url, query) => {
   let articleData = [];
 
   try {
     let response = await fetch(url + query, {
-        method: "GET",
-        headers: {
-            "X-Api-Key": apiKey,
-        }
+      method: "GET",
+      headers: {
+        "X-Api-Key": apiKey,
+      }
     });
     response = await response.json();
     let { articles } = response;
@@ -66,7 +65,7 @@ const loadNews = async (url, query) => {
     articles = articleData.sort(
       (objA, objB) => objB.timeStamp - objA.timeStamp
     );
-    // console.log(articles);
+    articles = await cleanUpArticles(articles)
     return articles
 
   } catch (e) {
@@ -83,25 +82,12 @@ const getNews = async (url, query) => {
 
     const articles = await loadNews(url, query);
     const carouselArticles = articles.slice(0, 3);
-    const topArticle = articles[3];
-    articles.splice(0, 4);
+    const topArticle = articles[0];
+    articles.splice(0, 1);
 
     // console.log(topArticle);
 
     return { carouselArticles, topArticle, articles }
-
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-const getCovidWatch = async (url, query) => {
-  try {
-    const articles = await loadNews(url, query);
-    const topArticle = articles[0];
-    articles.splice(0, 1);
-
-    return { topArticle, articles }
 
   } catch (e) {
     console.log(e);
@@ -119,27 +105,27 @@ router.get("/", wrapAsync((async (req, res, next) => {
 
 
 router.post("/", (req, res, next) => {
-  const { newsQuery } = req.body;
-  console.log(`POST: Req.body is ${newsQuery}`);
+  const { newsType } = req.body;
+  console.log(`POST: Req.body is ${newsType}`);
   try {
-    res.redirect(`/news/${newsQuery}`)
+    res.redirect(`/news/${newsType}`)
   } catch (e) {
     next(e);
   }
 })
 
-router.get('/:newsQuery', wrapAsync((async (req, res, next) => {
+router.get('/:newsType', wrapAsync((async (req, res, next) => {
 
-  const { newsQuery } = req.params;
-  // console.log(`GET: Req.params is ${newsQuery}`);
+  const { newsType } = req.params;
+  // console.log(`GET: Req.params is ${newsType}`);
 
-  const newsQueryArray = newsQuery.split(',');
+  const newsTypeArray = newsType.split(',');
 
-  // console.log(`GET: As array is ${newsQueryArray}`);
+  // console.log(`GET: As array is ${newsTypeArray}`);
 
   let sources = [];
 
-  for (let q of newsQueryArray) {
+  for (let q of newsTypeArray) {
     switch (q) {
       case "technology":
         sources.push("techradar,techcrunch,engadget,hacker-news,recode,the-next-web,the-verge,wired")
@@ -165,7 +151,7 @@ router.get('/:newsQuery', wrapAsync((async (req, res, next) => {
 
 
   // NOTE: I have this IF condition here bec the app keeps calling app.js or article-image in req.params. Cannot figure out why yet.
-  if (newsQuery != "app.js" && newsQuery != "alt='article-image'") {
+  if (newsType != "app.js" && newsType != "alt='article-image'") {
     const { carouselArticles, topArticle, articles } = await getNews(headlinesUrl, sources);
     if (articles.length == 0) {
       throw new AppError(404, "No Articles Found");

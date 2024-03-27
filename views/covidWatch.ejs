@@ -1,75 +1,80 @@
 <% layout('layout/boilerplate') -%>
 
-    <div class="container">
-        <!-- <h1>Covid Watch</h1> -->
+    <% if (messages) { %>
 
-
-        <div class="sidebarcontainer">
-            <form action="/covid-watch" method="POST">
-                <label for="query">Country of Interest</label>
-                <input type="text" id="query" name="countryQuery">
-                <button class="btn btn-dark">Check</button>
-            </form>
-
-            <div class="container mt-5">
-                <h4>Statistics</h4>
-            </div>
-
+        <div class="alert alert-secondary alert-dismissible fade show caps border-0" role="alert">
+            <%= messages %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        <div class="contentcontainer topArticle mb-5">
-            <div class="row g-5 align-items-center">
-                <div class="col-lg-5">
+        <% } %>
 
-                    <p class="sourceHeader">
-                        <%=topArticle.source%><span class="timestamp">
-                                <%=topArticle.publishedAt%>
-                            </span>
-                    </p>
+            <div class="container">
+                <!-- <h1>Covid Watch</h1> -->
 
-                    <h5><a href=<%=topArticle.url%>><%=topArticle.title%></a></h5>
 
-                    <p>
-                        <%=topArticle.description%>
-                    </p>
+                <div class="sidebarcontainer">
+                    <form action="/covid-watch" method="POST">
+                        <label for="query">Country of Interest</label>
+                        <input type="text" id="query" name="countryQuery">
+                        <button class="btn btn-dark">Check</button>
+                    </form>
 
                 </div>
 
-                <div class="col-lg-7">
+                <div class="contentcontainer topArticle mb-5">
+                    <div class="row g-5 align-items-center">
+                        <div class="col-lg-5">
 
-                    <a href=<%=topArticle.url%>><img src=<%=topArticle.urlToImage%>
-                        alt="article-image"></a>
+                            <p class="sourceHeader">
+                                <%=topArticle.source%><span class="timestamp">
+                                        <%=topArticle.publishedAt%>
+                                    </span>
+                            </p>
 
+                            <h5><a href=<%=topArticle.url%>><%=topArticle.title%></a></h5>
+
+                            <p>
+                                <%=topArticle.description%>
+                            </p>
+
+                        </div>
+
+                        <div class="col-lg-7">
+
+                            <a href=<%=topArticle.url%>><img src=<%=topArticle.urlToImage%>
+                                alt="article-image"></a>
+
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
 
-        <div class="contentcontainer">
-            <div class="row g-5 align-items-bottom">
-                <% for (let a of articles) { %>
+                <div class="contentcontainer">
+                    <div class="row g-5 align-items-bottom">
+                        <% for (let a of articles) { %>
 
-                    <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
 
-                        <p class="sourceHeader">
-                            <%=a.source%><span class="timestamp">
-                                    <%=a.publishedAt%>
-                                </span>
-                        </p>
+                                <p class="sourceHeader">
+                                    <%=a.source%><span class="timestamp">
+                                            <%=a.publishedAt%>
+                                        </span>
+                                </p>
 
-                        <a href=<%=a.url%>><img src=<%=a.urlToImage%> alt="article-image"></a>
+                                <a href=<%=a.url%>><img src=<%=a.urlToImage%> alt="article-image"></a>
 
-                        <h5><a href=<%=a.url%>><%=a.title%></a></h5>
+                                <h5><a href=<%=a.url%>><%=a.title%></a></h5>
 
 
-                        <p>
-                            <%=a.description%>
-                        </p>
+                                <p>
+                                    <%=a.description%>
+                                </p>
+
+                            </div>
+                            <% } %>
 
                     </div>
-                    <% } %>
+                </div>
 
             </div>
-        </div>
-
-    </div>

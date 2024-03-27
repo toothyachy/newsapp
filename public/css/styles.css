@@ -19,25 +19,25 @@ img {
 }
 
 .dividergrey {
-    background-color:#F2F2F2;
+    background-color: #F2F2F2;
     height: 20px;
     border-style: none;
 }
 
 .navbarcontainer {
     font-weight: 500;
-    font-size:larger;
+    font-size: larger;
 }
 
 .datecontainer {
-    background-color:#F2F2F2;
+    background-color: #F2F2F2;
     border-style: none;
-    font-size:medium;
+    font-size: medium;
     font-weight: 500;
     font-style: italic;
     text-align: center;
     padding: 1rem 5rem 0;
-    width:fit-content;
+    width: fit-content;
 }
 
 @media screen and (min-width:992px) {
@@ -46,7 +46,7 @@ img {
         width: 20%;
         height: 100%;
     }
-    
+
     .carouselcontainer {
         display: flex;
     }
@@ -58,7 +58,7 @@ img {
 
 .carouselcontainer img {
     height: 70vh;
-    object-fit:cover;
+    object-fit: cover;
     display: block;
 }
 
@@ -78,11 +78,12 @@ img {
 .carousel-caption h5 {
     font-size: 1.5rem;
 }
+
 .contentcontainer .sourceHeader {
     font-weight: 600;
     font-size: 0.8rem;
     text-transform: uppercase;
-    color:royalblue;
+    color: royalblue;
 }
 
 .contentcontainer .timestamp {
@@ -164,8 +165,32 @@ img {
     -webkit-box-orient: vertical;
     /* truncate to 4 lines */
     -webkit-line-clamp: 4;
-  }
+}
 
-  .text-right {
+.text-right {
     text-align: right;
-  }
+}
+
+.auto-close {
+    animation: hideElement 5s forwards;
+}
+
+@keyframes hideElement {
+    0% {
+        opacity: 1;
+        height: auto;
+    }
+
+    100% {
+        opacity: 0;
+        height: 0;
+        padding: 0;
+        margin: 0;
+        border: none;
+        overflow: hidden;
+    }
+}
+
+.caps {
+    text-transform: capitalize;
+}

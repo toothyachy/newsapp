@@ -41,50 +41,6 @@ app.use("/news", newsRoutes);
 app.use("/covid-watch", covidWatchRoutes);
 app.use("/likelist", likeListRoutes);
 
-
-// ----------- SESSION MANAGEMENT -------------
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/newsApp'
-const secret = process.env.SECRET || 'thisshouldbeabettersecret!'
-
-const store = MongoStore.create({
-  mongoUrl: dbUrl,
-  touchAfter: 24 * 60 * 60,
-  crypto: {
-      secret
-  }
-});
-
-store.on("error", function(e) {
-  console.log("SESSION STORE ERROR", error);
-})
-
-const sessionConfig = {
-  store,
-  secret,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    expires: Date.now() + (1000 * 60 * 60 * 24 * 7), // expires in 1 week
-    maxAge: 1000 * 60 * 60 * 24 * 7
-  }
-}
-
-app.use(session(sessionConfig))
-
-// ----------- MONGOOSE CONNECTION -------------
- 
-mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log("CONNECTION OPEN, MY LORD");
-  })
-  .catch(err => {
-    console.log(`THERE HAS BEEN AN ERROR. PLS SEE ${err}`);
-  });
-
-
 // ----------- THROW APPERROR EXAMPLE -------------
 app.get("/errorexample", (req, res, next) => {
   const { query } = req.query;
@@ -116,10 +72,9 @@ app.get("/admin", (req, res, next) => {
 app.all("*", (req, res, next) => {
   next(new AppError(404, "Page Not Found"))
 })
-
+ 
 app.use((err, req, res, next) => {
   const { status = 504, message = "Boo-hoo-hoo, You Did a Boo-Boo" } = err;
-  // res.status(status).send(`Calm down. Every mistake is a step closer to success. Error Message: ${message}`)
   res.render('notFound.ejs', { err, date })
 })
 
