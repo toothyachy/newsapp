@@ -18,7 +18,7 @@ const date = d.toDateString();
 // Alternatively you can use the AND / OR / NOT keywords, and optionally group these with parenthesis. Eg: crypto AND (ethereum OR litecoin) NOT bitcoin.
 
 
-const apiKey = process.env.apiKey;
+const apiKey = process.env.NEWSAPI_APIKEY;
 const headlinesUrl = "https://newsapi.org/v2/top-headlines?pageSize=31&sources="
 const covidUrl = "https://newsapi.org/v2/everything?searchIn=title&sortBy=relevancy&q=covid%26AND%26";
 //searchIn=title or content or description?

@@ -20,7 +20,7 @@ const date = d.toDateString();
 // Alternatively you can use the AND / OR / NOT keywords, and optionally group these with parenthesis. Eg: crypto AND (ethereum OR litecoin) NOT bitcoin.
 
 
-const apiKey = process.env.apiKey;
+const apiKey = process.env.NEWSAPI_APIKEY;
 const headlinesUrl = "https://newsapi.org/v2/top-headlines?pageSize=50&sources="
 const general = "abc-news,al-jazeera-english,associated-press,axios,bbc-news,cnn,google-news,independent,msnbc,newsweek,new-york-magazine,reddit-r-all,reuters,time,vice-news";
 

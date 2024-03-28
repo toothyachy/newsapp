@@ -8,7 +8,7 @@ const uuid = require("uuid")
 const mongoose = require("mongoose");
 const Article = require("./models/articleSchema");
 const LikeList = require("./models/likeListSchema");
-const {likeListSchema} = require("./schemas.js")
+const { likeListSchema } = require("./schemas.js")
 const { default: axios } = require("axios");
 const AppError = require("./utils/AppError");
 const { nextTick } = require("process");
@@ -36,7 +36,7 @@ function wrapAsync(fn, sta, msg) {
 
 const validateLike = (req, res, next) => {
 
-  const {error} = likeListSchema.validate(req.body);
+  const { error } = likeListSchema.validate(req.body);
 
   if (error) {
     const msg = error.details.map(el => el.message).join(",");
@@ -67,7 +67,7 @@ const date = d.toDateString();
 // Alternatively you can use the AND / OR / NOT keywords, and optionally group these with parenthesis. Eg: crypto AND (ethereum OR litecoin) NOT bitcoin.
 
 
-const apiKey = process.env.apiKey; 
+const apiKey = process.env.NEWSAPI_APIKEY;
 const headlinesUrl = "https://newsapi.org/v2/top-headlines?pageSize=31&sources="
 const covidUrl = "https://newsapi.org/v2/everything?searchIn=title&sortBy=relevancy&q=covid%26AND%26";
 //searchIn=title or content or description?
@@ -274,8 +274,8 @@ app.get("/likelist/new", (req, res, next) => {
 
 app.post("/likelist", validateLike, wrapAsync(async (req, res, next) => {
 
-  const {body} = req;
-  
+  const { body } = req;
+
   let newLike = new LikeList({
     like: body.like,
     category: body.category,
@@ -319,9 +319,9 @@ app.get("/likelist/edit/:id", wrapAsync((async (req, res, next) => {
   res.render("likeListEdit.ejs", { categories, ratings, editLike, date })
 })));
 
-app.put("/likelist/:id", validateLike, wrapAsync((async(req, res, next) => {
-  const {id} = req.params;
-  const {body} = req;
+app.put("/likelist/:id", validateLike, wrapAsync((async (req, res, next) => {
+  const { id } = req.params;
+  const { body } = req;
 
   let newLike = {
     like: body.like,
@@ -333,15 +333,15 @@ app.put("/likelist/:id", validateLike, wrapAsync((async(req, res, next) => {
     rating: body.rating,
   };
 
-  await LikeList.findByIdAndUpdate(id, newLike, {runValidators: true, new: true});
+  await LikeList.findByIdAndUpdate(id, newLike, { runValidators: true, new: true });
   res.redirect(`/likelist/${id}`)
 
 }), 400, "Could Not Edit Entry"))
 
 
 // DELETE SPECIFIC LIKE
-app.delete("/likelist/:id", wrapAsync((async(req, res, next) => {
-  const {id} = req.params;
+app.delete("/likelist/:id", wrapAsync((async (req, res, next) => {
+  const { id } = req.params;
   await LikeList.findByIdAndDelete(id);
   console.log("Like Deleted");
   res.redirect("/likelist");
