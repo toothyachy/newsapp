@@ -1,6 +1,6 @@
 const { SSMClient, GetParametersByPathCommand } = require("@aws-sdk/client-ssm");
 
-const client = new SSMClient();
+const client = new SSMClient({ region: 'ap-southeast-1' });
 const input = {
     Path: "/newsapp/prod",
     Recursive: true,
