@@ -9,16 +9,7 @@ const router = express.Router();
 const d = new Date();
 const date = d.toDateString();
 
-
-// NewsApi
-
-// Surround phrases with quotes (") for exact match.
-// Prepend words or phrases that must appear with a + symbol. Eg: +bitcoin
-// Prepend words that must not appear with a - symbol. Eg: -bitcoin
-// Alternatively you can use the AND / OR / NOT keywords, and optionally group these with parenthesis. Eg: crypto AND (ethereum OR litecoin) NOT bitcoin.
-
-
-const apiKey = process.env.NEWSAPI_APIKEY;
+let newsApiKey = process.env.NEWSAPI_APIKEY;
 const headlinesUrl = "https://newsapi.org/v2/top-headlines?pageSize=31&sources="
 const covidUrl = "https://newsapi.org/v2/everything?searchIn=title&sortBy=relevancy&q=covid%26AND%26";
 //searchIn=title or content or description?
@@ -34,7 +25,7 @@ const loadNews = async (url, query) => {
     let response = await fetch(url + query, {
       method: "GET",
       headers: {
-        "X-Api-Key": apiKey,
+        "X-Api-Key": newsApiKey,
       }
     });
     response = await response.json();
@@ -94,6 +85,7 @@ const getCovidWatch = async (url, query) => {
 // ----------- COVID WATCH -------------
 
 router.get("/", wrapAsync((async (req, res, next) => {
+  newsApiKey = req.newsApiKey;
   const { topArticle, articles } = await getCovidWatch(covidUrl, "");
   const currentMessages = messages;
   messages = ""
@@ -111,8 +103,8 @@ router.post("/", (req, res, next) => {
 })
 
 router.get('/:countryQuery', wrapAsync((async (req, res, next) => {
+  newsApiKey = req.newsApiKey;
   const { countryQuery } = req.params;
-
   const { topArticle, articles } = await getCovidWatch(covidUrl, countryQuery);
   if (articles.length == 0) {
     messages = `No Articles Found about Covid in ${countryQuery}`

@@ -1,31 +1,10 @@
 const express = require("express");
-const app = express();
-
-const uuid = require("uuid");
 const LikeList = require("../models/likeListSchema");
-const {likeListSchema} = require("../schemas.js");
+const { likeListSchema } = require("../schemas.js");
 const AppError = require("../utils/AppError");
 const wrapAsync = require("../utils/wrapAsync");
 const router = express.Router();
-
-// ----------- SESSION MANAGEMENT -------------
-
-const session = require('express-session');
-const { sessionConfig, dbUrl } = require('../utils/sessionUtils');
-
-// Use session middleware
-app.use(session(sessionConfig));
-
-// ----------- MONGOOSE CONNECTION -------------
-const mongoose = require('mongoose')
-
-mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log("CONNECTION OPEN, MY LORD");
-  })
-  .catch(err => {
-    console.log(`THERE HAS BEEN AN ERROR. PLS SEE ${err}`);
-  });
+const mongoose = require("mongoose")
 
 // ----------- HELPERS -------------
 
@@ -34,15 +13,15 @@ const date = d.toDateString();
 
 const validateLike = (req, res, next) => {
 
-    const {error} = likeListSchema.validate(req.body);
-  
-    if (error) {
-      const msg = error.details.map(el => el.message).join(",");
-      next(new AppError(400, msg))
-    } else {
-      next();
-    }
+  const { error } = likeListSchema.validate(req.body);
+
+  if (error) {
+    const msg = error.details.map(el => el.message).join(",");
+    next(new AppError(400, msg))
+  } else {
+    next();
   }
+}
 
 // ----------- LIKE LIST -------------
 
@@ -55,15 +34,14 @@ router.get("/", wrapAsync(async (req, res, next) => {
   res.render("likelist.ejs", { likeList, date });
 }, 404, "Page Not Found"));
 
+
 // ADD NEW LIKE
 router.get("/new", (req, res, next) => {
   res.render("likeListNew.ejs", { categories, ratings, date });
 });
 
 router.post("/", validateLike, wrapAsync(async (req, res, next) => {
-
-  const {body} = req;
-  
+  const { body } = req;
   let newLike = new LikeList({
     like: body.like,
     category: body.category,
@@ -83,6 +61,7 @@ router.post("/", validateLike, wrapAsync(async (req, res, next) => {
 // SHOW SPECIFIC LIKE
 router.get("/:id", wrapAsync((async (req, res, next) => {
   const { id } = req.params;
+  console.log(id);
   if (!mongoose.isValidObjectId(id)) {
     return next(new AppError(400, "Invalid Request"));
   }
@@ -107,9 +86,9 @@ router.get("/edit/:id", wrapAsync((async (req, res, next) => {
   res.render("likeListEdit.ejs", { categories, ratings, editLike, date })
 })));
 
-router.put("/:id", validateLike, wrapAsync((async(req, res, next) => {
-  const {id} = req.params;
-  const {body} = req;
+router.put("/:id", validateLike, wrapAsync((async (req, res, next) => {
+  const { id } = req.params;
+  const { body } = req;
 
   let newLike = {
     like: body.like,
@@ -121,17 +100,15 @@ router.put("/:id", validateLike, wrapAsync((async(req, res, next) => {
     rating: body.rating,
   };
 
-  await LikeList.findByIdAndUpdate(id, newLike, {runValidators: true, new: true});
+  await LikeList.findByIdAndUpdate(id, newLike, { runValidators: true, new: true });
   res.redirect(`/likelist/${id}`)
-
 }), 400, "Could Not Edit Entry"))
 
 
 // DELETE SPECIFIC LIKE
-router.delete("/:id", wrapAsync((async(req, res, next) => {
-  const {id} = req.params;
+router.delete("/:id", wrapAsync((async (req, res, next) => {
+  const { id } = req.params;
   await LikeList.findByIdAndDelete(id);
-  // console.log("Like Deleted");
   res.redirect("/likelist");
 }), 400, "Could Not Delete Entry"));
 

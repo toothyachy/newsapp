@@ -1,26 +1,14 @@
 const express = require("express");
-const uuid = require("uuid")
 const Article = require("../models/articleSchema");
 const AppError = require("../utils/AppError");
 const wrapAsync = require("../utils/wrapAsync");
 const cleanUpArticles = require("../utils/cleanUpArticles")
-const { url } = require("inspector");
-
 const router = express.Router();
 
 const d = new Date();
 const date = d.toDateString();
 
-
-// NewsApi
-
-// Surround phrases with quotes (") for exact match.
-// Prepend words or phrases that must appear with a + symbol. Eg: +bitcoin
-// Prepend words that must not appear with a - symbol. Eg: -bitcoin
-// Alternatively you can use the AND / OR / NOT keywords, and optionally group these with parenthesis. Eg: crypto AND (ethereum OR litecoin) NOT bitcoin.
-
-
-const apiKey = process.env.NEWSAPI_APIKEY;
+let newsApiKey = process.env.NEWSAPI_APIKEY;
 const headlinesUrl = "https://newsapi.org/v2/top-headlines?pageSize=50&sources="
 const general = "abc-news,al-jazeera-english,associated-press,axios,bbc-news,cnn,google-news,independent,msnbc,newsweek,new-york-magazine,reddit-r-all,reuters,time,vice-news";
 
@@ -34,12 +22,11 @@ const loadNews = async (url, query) => {
     let response = await fetch(url + query, {
       method: "GET",
       headers: {
-        "X-Api-Key": apiKey,
+        "X-Api-Key": newsApiKey,
       }
     });
     response = await response.json();
     let { articles } = response;
-
     for (let a of articles) {
 
       const d = a.publishedAt;
@@ -76,7 +63,7 @@ const loadNews = async (url, query) => {
 loadNews(headlinesUrl, general);
 
 
-const getNews = async (url, query) => {
+const getNews = async (url, query, apiKey) => {
 
   try {
 
@@ -84,8 +71,6 @@ const getNews = async (url, query) => {
     const carouselArticles = articles.slice(0, 3);
     const topArticle = articles[0];
     articles.splice(0, 1);
-
-    // console.log(topArticle);
 
     return { carouselArticles, topArticle, articles }
 
@@ -98,6 +83,7 @@ const getNews = async (url, query) => {
 // ----------- NEWS PAGE -------------
 
 router.get("/", wrapAsync((async (req, res, next) => {
+  newsApiKey = req.newsApiKey;
   const { carouselArticles, topArticle, articles } = await getNews(headlinesUrl, general);
   res.render("news.ejs", { carouselArticles, topArticle, articles, date })
 
@@ -115,13 +101,9 @@ router.post("/", (req, res, next) => {
 })
 
 router.get('/:newsType', wrapAsync((async (req, res, next) => {
-
+  newsApiKey = req.newsApiKey;
   const { newsType } = req.params;
-  // console.log(`GET: Req.params is ${newsType}`);
-
   const newsTypeArray = newsType.split(',');
-
-  // console.log(`GET: As array is ${newsTypeArray}`);
 
   let sources = [];
 
