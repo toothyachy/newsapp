@@ -21,7 +21,9 @@
 
         <select class="form-control" id="validationCustom02" name="category" required>
           <%for (let c of categories) {%>
-            <option value="<%=c%>"><%=c%></option>
+            <option value="<%=c%>">
+              <%=c%>
+            </option>
             <%}%>
         </select>
 
@@ -37,7 +39,9 @@
         <label for="validationCustom03" class="form-label">Rating</label>
         <select class="form-control" id="validationCustom03" name="rating">
           <%for (let r of ratings) {%>
-            <option value="<%=r%>"><%=r%></option>
+            <option value="<%=r%>">
+              <%=r%>
+            </option>
             <%}%>
         </select>
 
@@ -90,22 +94,3 @@
     </form>
 
   </div>
-
-  <!-- const likeListSchema = new Schema ({
-  like: {
-      type: String,
-      required: true,
-  },
-  category: {
-      type: [String],
-      enum: ["Eat/Drink", "Experience", "Watch", "Learn"],
-  },
-  description: String,
-  url: String,
-  urlToImage: String,
-  date: Date,
-  rating: {
-      type: Number,
-      enum: [1,2,3,4,5],
-  },
-}); -->
