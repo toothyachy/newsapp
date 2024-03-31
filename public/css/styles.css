@@ -171,26 +171,6 @@ img {
     text-align: right;
 }
 
-.auto-close {
-    animation: hideElement 5s forwards;
-}
-
-@keyframes hideElement {
-    0% {
-        opacity: 1;
-        height: auto;
-    }
-
-    100% {
-        opacity: 0;
-        height: 0;
-        padding: 0;
-        margin: 0;
-        border: none;
-        overflow: hidden;
-    }
-}
-
 .caps {
     text-transform: capitalize;
 }
