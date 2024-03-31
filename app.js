@@ -113,7 +113,11 @@ const main = async (parameters) => {
 };
 
 (async () => {
-  const getParameters = require("./config")
-  const parameters = await getParameters();
-  await main(parameters)
+  try {
+    const getParameters = require("./config")
+    const parameters = await getParameters();
+    await main(parameters)
+  } catch (err) {
+    console.log(err);
+  }
 })()
