@@ -2,11 +2,11 @@
 
   <div class="container">
 
-    <div class="container pb-3">
-      <a href="/likelist/new"><button class="btn btn-primary">Add New Like</button></a>
+    <div class="container g-1 pb-3">
+      <a href="/likelist/new"><button class="btn btn-dark">Add New Like</button></a>
     </div>
 
-    <div class="row g-5 align-items-center">
+    <div class="likescontainer row g-5 align-items-center">
       <% for (let l of likeList) { %>
 
         <div class="listcard border-bottom col-lg-4 col-md-6 col-sm-12">
@@ -28,11 +28,10 @@
           </div>
 
           <div class="card-body">
-            <a href="/likelist/<%=l.id%>">
-              <h3 class="card-title text-truncate">
+            <h3 class="card-title text-truncate"><a href="/likelist/<%=l.id%>">
                 <%=l.like%>
-            </a>
-            </h3>
+              </a></h3>
+
             <p class="card-text line-clamp-4">
               <%=l.description%>
             </p>

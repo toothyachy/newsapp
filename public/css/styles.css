@@ -131,6 +131,11 @@ img {
     padding: 0 2px;
 }
 
+.likescontainer a {
+    color: inherit;
+    text-decoration: none;
+}
+
 .listcard {
     height: 60vh;
 }
