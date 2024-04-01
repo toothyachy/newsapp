@@ -29,11 +29,11 @@ const categories = ["Eat/Drink", "Experience", "Watch", "Learn"];
 const ratings = [0, 1, 2, 3, 4, 5]
 
 // SHOW ALL LIKES
-router.get("/", wrapAsync(async (req, res, next) => {
+router.get("/", wrapAsync((async (req, res, next) => {
   const likeList = await LikeList.find();
   console.log(likeList);
   res.render("likelist.ejs", { likeList, date });
-}, 404, "Page Not Found"));
+}), 404, "Page Not Found"));
 
 
 // ADD NEW LIKE
