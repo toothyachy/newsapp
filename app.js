@@ -108,7 +108,7 @@ const main = async (parameters) => {
     res.render('notFound.ejs', { err, date })
   })
 
-  const port = process.env.PORT || 2000
+  const port = 8080
   app.listen(port, () => console.log(`YESH I'M LISTENING ON ${port}`));
 };
 
