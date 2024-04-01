@@ -32,7 +32,7 @@ const ratings = [0, 1, 2, 3, 4, 5]
 router.get("/", wrapAsync((async (req, res, next) => {
   const likeList = await LikeList.find();
   console.log(likeList);
-  res.render("likelist.ejs", { likeList, date });
+  res.render("likeList.ejs", { likeList, date });
 }), 404, "Page Not Found"));
 
 
