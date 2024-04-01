@@ -28,8 +28,10 @@
           </div>
 
           <div class="card-body">
-            <h3 class="card-title text-truncate">
-              <%=l.like%>
+            <a href="/likelist/<%=l.id%>">
+              <h3 class="card-title text-truncate">
+                <%=l.like%>
+            </a>
             </h3>
             <p class="card-text line-clamp-4">
               <%=l.description%>
@@ -43,7 +45,7 @@
                 </em></p>
             </div>
             <div class="col-4">
-              <a href="<%=l.url%>">Go to Website</a>
+              <a target="_blank" href="<%=l.url%>">Go to Website</a>
             </div>
             <div class="col-4">
               <a href="/likelist/edit/<%=l.id%>">Edit Entry</a>
